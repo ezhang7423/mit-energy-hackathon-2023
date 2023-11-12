@@ -96,8 +96,12 @@
                         <input id="hecataresinput" style="width: 8em" type="range" min="2" max="8" value="2"
                             class="range  range-xs" />
                     </label>
-
-                    <button onclick="addPopups()" class="btn btn-neutral">Save</button>
+                    <!-- <select class="select select-bordered w-full max-w-xs">
+                        <option disabled selected>Who shot first?</option>
+                        <option>Han Solo</option>
+                        <option>Greedo</option>
+                    </select> -->
+                    <button onclick="addPopups()" class="btn btn-neutral">Search</button>
                 </div>
             </div>
             <!-- <button >test me</button> -->
@@ -227,6 +231,12 @@
         map.setFog({}); // Set the default atmosphere style
     });
 
+    const crop_types = ['Tomato', 'Strawberry', 'Cucumber', "Lettuce"]
+    function choose(choices) {
+        var index = Math.floor(Math.random() * choices.length);
+        return choices[index];
+    }
+
     function addPopups() {
         for (const marker of geojson.features) {
             // Create a DOM element for each marker.
@@ -241,6 +251,8 @@
 
             popup.setHTML(
                 `<strong>${marker.properties.name}</strong>
+                <br/>
+                Most Lucrative Crop(s): ${choose(crop_types)}
                 <br />
                 Renewable Energy Only: Yes
                 <br /> 
