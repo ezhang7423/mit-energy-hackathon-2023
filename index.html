@@ -6,12 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Greenhouse Suggester</title>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100&display=swap" rel="stylesheet">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         body {
             margin: 0;
             padding: 0;
+            font-family: "IBM Plex Sans";
         }
 
         #map {
@@ -25,21 +31,79 @@
             background-image: url('https://docs.mapbox.com/mapbox-gl-js/assets/pin.svg');
             background-size: cover;
             cursor: pointer;
+
         }
 
-        .mapboxgl-ctrl{
+
+        .mapboxgl-ctrl {
             display: none !important;
+        }
+
+        .layover>* {
+            position: absolute;
+            z-index: 2;
+            color: white
+        }
+
+        .mock {
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+
+        }
+
+        .form {
+            color: black;
+            top: 15px;
+            left: calc(100% - 15px);
+            transform: translateX(-100%);
         }
     </style>
 </head>
 
 <body>
+    <div class="layover">
+        <img style="top: 15px; left: 15px"
+            src="https://www.koidra.ai/lib-content/uploads/2023/06/0806-Koidra-Logo-RGB-WEB-01.svg"
+            class="bricks-site-logo css-filter" alt="Koidra" decoding="async"
+            data-bricks-logo="https://www.koidra.ai/lib-content/uploads/2023/06/0806-Koidra-Logo-RGB-WEB-01.svg"
+            loading="eager" width="480" />
+        <div class="mock">
+            Mockup
+        </div>
+        <div class="form">
+            <div class="card bg-base-200 w-80">
+                <div class="card-body">
+                    <input placeholder="Country (default: all)" class="input input-bordered" />
+                    <label class="label cursor-pointer">
+                        Renewable Energy Only
+                        <input type="checkbox" class="toggle" />
+                    </label>
+                    <!-- <label class="label cursor-pointer">
+                        Tax Advantage
+                        <input style="width: 10em" type="range" min="0" max="100" value="40" class="range  range-xs" />
+                    </label> -->
+                    <label class="label cursor-pointer">
+                        Land Cost
+                        <input style="width: 10em" type="range" min="0" max="100" value="40" class="range  range-xs" />
+                    </label>
+                    <label class="label cursor-pointer">
+                        Hectares
+                        <input style="width: 10em" type="range" min="0" max="100" value="40" class="range  range-xs" />
+                    </label>
+
+                    <button onclick="addPopups()" class="btn btn-neutral">Save</button>
+                </div>
+            </div>
+            <!-- <button >test me</button> -->
+        </div>
+    </div>
     <div id="map"></div>
 </body>
 
 
 <script>
-    
+
     // TO MAKE THE MAP APPEAR YOU MUST
     // ADD YOUR ACCESS TOKEN FROM
     // https://account.mapbox.com
@@ -51,7 +115,8 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Everest',
-                    'height': 8849
+                    'height': 8849,
+                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
                 },
                 'geometry': {
                     'type': 'Point',
@@ -62,7 +127,8 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Denali',
-                    'height': 6194
+                    'height': 6194,
+                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
                 },
                 'geometry': {
                     'type': 'Point',
@@ -73,7 +139,8 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Aconcagua',
-                    'height': 6961
+                    'height': 6961,
+                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
                 },
                 'geometry': {
                     'type': 'Point',
@@ -84,7 +151,8 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Vinson Massif',
-                    'height': 4892
+                    'height': 4892,
+                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
                 },
                 'geometry': {
                     'type': 'Point',
@@ -95,7 +163,8 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Kilimanjaro',
-                    'height': 5895
+                    'height': 5895,
+                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
                 },
                 'geometry': {
                     'type': 'Point',
@@ -106,7 +175,8 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Elbrus',
-                    'height': 5642
+                    'height': 5642,
+                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
                 },
                 'geometry': {
                     'type': 'Point',
@@ -117,7 +187,8 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Puncak Jaya',
-                    'height': 4884
+                    'height': 4884,
+                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
                 },
                 'geometry': {
                     'type': 'Point',
@@ -128,7 +199,8 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Mauna Kea',
-                    'height': 4205
+                    'height': 4205,
+                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
                 },
                 'geometry': {
                     'type': 'Point',
@@ -149,30 +221,40 @@
         map.setFog({}); // Set the default atmosphere style
     });
 
-    for (const marker of geojson.features) {
-        // Create a DOM element for each marker.
-        const el = document.createElement('div');
-        el.className = 'marker';
-        const size = marker.properties.height / 100;
-        el.style.width = `${size}px`;
-        el.style.height = `${size}px`;
+    function addPopups() {
+        for (const marker of geojson.features) {
+            // Create a DOM element for each marker.
+            const el = document.createElement('div');
+            el.className = 'marker';
+            const size = marker.properties.height / 100;
+            el.style.width = `${size}px`;
+            el.style.height = `${size}px`;
 
-        // Add a popup displayed on click for each marker
-        const popup = new mapboxgl.Popup({ offset: 25 });
-        popup.setHTML(
-            `<h2>${marker.properties.name}</h2>${marker.properties.height}m<br/>`
-        );
+            // Add a popup displayed on click for each marker
+            const popup = new mapboxgl.Popup({ offset: 25 });
+            popup.setHTML(
+                `<strong>${marker.properties.name}</strong>
+                <br />
+                Renewable Energy Only: Yes
+                <br /> 
+                Cost: ${marker.properties.cost}
+                <br/>
+                Hectares: ${marker.properties.height}
+                 `
+            );
 
-        // Add markers to the map.
-        new mapboxgl.Marker({
-            element: el,
-            // Point markers toward the nearest horizon
-            rotationAlignment: 'horizon',
-            offset: [0, -size / 2]
-        })
-            .setLngLat(marker.geometry.coordinates)
-            .setPopup(popup)
-            .addTo(map);
+            // Add markers to the map.
+            new mapboxgl.Marker({
+                element: el,
+                // Point markers toward the nearest horizon
+                rotationAlignment: 'horizon',
+                offset: [0, -size / 2]
+
+            })
+                .setLngLat(marker.geometry.coordinates)
+                .setPopup(popup)
+                .addTo(map);
+        }
     }
 
 </script>
