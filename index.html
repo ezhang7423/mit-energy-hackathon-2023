@@ -8,7 +8,7 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
@@ -85,10 +85,10 @@
                     </label> -->
                     <label class="label cursor-pointer">
                         <div>
-                            Max Cost: <span id="landcost">500</span>K
+                            Max Cost: <span id="landcost">2</span>M
                         </div>
 
-                        <input id="landcostinput" style="width: 8em" type="range" min="100" max="1000" value="500"
+                        <input id="landcostinput" style="width: 8em" type="range" min="2" max="100" value="2"
                             class="range  range-xs" />
                     </label>
                     <label class="label cursor-pointer">
@@ -131,7 +131,7 @@
             {
                 'type': 'Feature',
                 'properties': {
-                    'name': 'Everest',
+                    'name': 'Kathmandu',
                     'altitude': 8849,
                 },
                 'geometry': {
@@ -142,7 +142,7 @@
             {
                 'type': 'Feature',
                 'properties': {
-                    'name': 'Denali',
+                    'name': 'Anchorage',
                     'altitude': 6194,
                 },
                 'geometry': {
@@ -153,7 +153,7 @@
             {
                 'type': 'Feature',
                 'properties': {
-                    'name': 'Aconcagua',
+                    'name': 'Mendoza',
                     'altitude': 6961,
                 },
                 'geometry': {
@@ -164,18 +164,73 @@
             {
                 'type': 'Feature',
                 'properties': {
-                    'name': 'Vinson Massif',
-                    'altitude': 4892,
+                    'name': 'Flagstaff',
+                    'altitude': 2000,
                 },
                 'geometry': {
                     'type': 'Point',
-                    'coordinates': [-85.617147, -78.525483]
+                    'coordinates': [112.1401, 36.0544]
                 }
             },
             {
                 'type': 'Feature',
                 'properties': {
-                    'name': 'Kilimanjaro',
+                    'name': 'Tacoma',
+                    'altitude': 4392,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-121.7603, 46.8523]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'West Yellowstone',
+                    'altitude': 2450,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-110.5885, 44.4280]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Gatlinburg',
+                    'altitude': 2025,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-83.4895, 35.6532]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Lone Pine',
+                    'altitude': -86,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-116.8460, 36.2468]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Homestead',
+                    'altitude': 2,
+                },
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-80.9403, 25.2866]
+                }
+            },
+            {
+                'type': 'Feature',
+                'properties': {
+                    'name': 'Moshi',
                     'altitude': 5895,
                 },
                 'geometry': {
@@ -186,7 +241,7 @@
             {
                 'type': 'Feature',
                 'properties': {
-                    'name': 'Elbrus',
+                    'name': 'Nalchik',
                     'altitude': 5642,
                 },
                 'geometry': {
@@ -197,7 +252,7 @@
             {
                 'type': 'Feature',
                 'properties': {
-                    'name': 'Puncak Jaya',
+                    'name': 'Tembagapura',
                     'altitude': 4884,
                 },
                 'geometry': {
@@ -208,7 +263,7 @@
             {
                 'type': 'Feature',
                 'properties': {
-                    'name': 'Mauna Kea',
+                    'name': 'Hilo',
                     'altitude': 4205,
                 },
                 'geometry': {
@@ -217,7 +272,7 @@
                 }
             }
         ]
-    };
+    }
 
 
     const map = new mapboxgl.Map({
@@ -247,20 +302,23 @@
             el.style.height = `${size}px`;
 
             // Add a popup displayed on click for each marker
-            const popup = new mapboxgl.Popup({ offset: 25 });
+            const popup = new mapboxgl.Popup({ offset: 25, maxWidth: 250, closeButton: false });
 
             popup.setHTML(
-                `<strong>${marker.properties.name}</strong>
+                `
+                <span style="font-size: 24px; font-family: IBM Plex Sans">
+                <strong>${marker.properties.name}</strong>
                 <br/>
                 Most Lucrative Crop(s): ${choose(crop_types)}
                 <br />
                 Renewable Energy Only: Yes
                 <br /> 
-                Cost: $${Math.floor(150 + Math.random() * 500)}K
+                Cost: $${Math.floor(2 + Math.random() * 8)}M
                 <br/>
-                Hectares: ${Math.floor(Math.random() * 4)}ha
+                Hectares: ${Math.ceil(Math.random() * 4)}ha
                 <br/>
-                Altitude: ${marker.properties.altitude}m
+                CO2 per year: ${marker.properties.altitude} MTCO2e
+                </span>
                  `
             );
 
