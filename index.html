@@ -84,12 +84,17 @@
                         <input style="width: 10em" type="range" min="0" max="100" value="40" class="range  range-xs" />
                     </label> -->
                     <label class="label cursor-pointer">
-                        Land Cost
-                        <input style="width: 10em" type="range" min="0" max="100" value="40" class="range  range-xs" />
+                        <div>
+                            Max Cost: <span id="landcost">500</span>K
+                        </div>
+
+                        <input id="landcostinput" style="width: 8em" type="range" min="100" max="1000" value="500"
+                            class="range  range-xs" />
                     </label>
                     <label class="label cursor-pointer">
-                        Hectares
-                        <input style="width: 10em" type="range" min="0" max="100" value="40" class="range  range-xs" />
+                        Hectares: <span id="hectares">2</span>ha
+                        <input id="hecataresinput" style="width: 8em" type="range" min="2" max="8" value="2"
+                            class="range  range-xs" />
                     </label>
 
                     <button onclick="addPopups()" class="btn btn-neutral">Save</button>
@@ -104,6 +109,14 @@
 
 <script>
 
+    document.getElementById('landcostinput').addEventListener('input', function (e) {
+        document.getElementById('landcost').innerText = e.target.value;
+    });
+
+    document.getElementById('hecataresinput').addEventListener('input', function (e) {
+        document.getElementById('hectares').innerText = e.target.value;
+    });
+
     // TO MAKE THE MAP APPEAR YOU MUST
     // ADD YOUR ACCESS TOKEN FROM
     // https://account.mapbox.com
@@ -115,8 +128,7 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Everest',
-                    'height': 8849,
-                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
+                    'altitude': 8849,
                 },
                 'geometry': {
                     'type': 'Point',
@@ -127,8 +139,7 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Denali',
-                    'height': 6194,
-                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
+                    'altitude': 6194,
                 },
                 'geometry': {
                     'type': 'Point',
@@ -139,8 +150,7 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Aconcagua',
-                    'height': 6961,
-                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
+                    'altitude': 6961,
                 },
                 'geometry': {
                     'type': 'Point',
@@ -151,8 +161,7 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Vinson Massif',
-                    'height': 4892,
-                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
+                    'altitude': 4892,
                 },
                 'geometry': {
                     'type': 'Point',
@@ -163,8 +172,7 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Kilimanjaro',
-                    'height': 5895,
-                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
+                    'altitude': 5895,
                 },
                 'geometry': {
                     'type': 'Point',
@@ -175,8 +183,7 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Elbrus',
-                    'height': 5642,
-                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
+                    'altitude': 5642,
                 },
                 'geometry': {
                     'type': 'Point',
@@ -187,8 +194,7 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Puncak Jaya',
-                    'height': 4884,
-                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
+                    'altitude': 4884,
                 },
                 'geometry': {
                     'type': 'Point',
@@ -199,8 +205,7 @@
                 'type': 'Feature',
                 'properties': {
                     'name': 'Mauna Kea',
-                    'height': 4205,
-                    'cost': '$' + Math.floor(150 + Math.random() * 500) + 'K',
+                    'altitude': 4205,
                 },
                 'geometry': {
                     'type': 'Point',
@@ -209,6 +214,7 @@
             }
         ]
     };
+
 
     const map = new mapboxgl.Map({
         container: 'map',
@@ -226,20 +232,23 @@
             // Create a DOM element for each marker.
             const el = document.createElement('div');
             el.className = 'marker';
-            const size = marker.properties.height / 100;
+            const size = marker.properties.altitude / 100;
             el.style.width = `${size}px`;
             el.style.height = `${size}px`;
 
             // Add a popup displayed on click for each marker
             const popup = new mapboxgl.Popup({ offset: 25 });
+
             popup.setHTML(
                 `<strong>${marker.properties.name}</strong>
                 <br />
                 Renewable Energy Only: Yes
                 <br /> 
-                Cost: ${marker.properties.cost}
+                Cost: $${Math.floor(150 + Math.random() * 500)}K
                 <br/>
-                Hectares: ${marker.properties.height}
+                Hectares: ${Math.floor(Math.random() * 4)}ha
+                <br/>
+                Altitude: ${marker.properties.altitude}m
                  `
             );
 
